@@ -300,6 +300,48 @@ select {
   background-size: 8px 8px;
 }
 
+.design-option-custom .custom-swatch {
+  color: #9aa5d2;
+  border: 1px dashed currentColor;
+  background:
+    linear-gradient(135deg, rgba(71, 118, 255, 0.14), rgba(255, 47, 145, 0.14)),
+    rgba(12, 17, 51, 0.25);
+}
+
+.saved-design-row {
+  border-color: rgba(132, 148, 255, 0.16);
+  background: rgba(12, 17, 51, 0.3);
+}
+
+.saved-design-row.is-selected {
+  border-color: #668cff;
+  box-shadow: 0 0 0 2px rgba(102, 140, 255, 0.1);
+}
+
+.custom-color-input {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  flex: 0 0 2.25rem;
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 0.65rem !important;
+  cursor: pointer;
+}
+
+.custom-color-input::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.custom-color-input::-webkit-color-swatch {
+  border: 0;
+  border-radius: 0.45rem;
+}
+
+.custom-design-preview {
+  min-height: 12rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+}
+
 .theme-light .design-option {
   color: #68739d;
   background: rgba(255, 255, 255, 0.55);
@@ -526,6 +568,114 @@ select {
 
 .design-old-future.theme-light .app-nav {
   background: rgba(232, 229, 207, 0.97);
+}
+
+/* User-created palettes. These variables are supplied by the selected design. */
+.app-shell.design-custom {
+  color-scheme: dark;
+  color: var(--custom-text);
+  background: var(--custom-background);
+}
+
+.app-shell.design-custom::before {
+  opacity: 0.18;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--custom-accent) 28%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--custom-accent) 28%, transparent) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+.design-custom .app-nav,
+.app-shell.design-custom .bg-white,
+.app-shell.design-custom .bg-white\/80 {
+  color: var(--custom-text);
+  background-color: color-mix(in srgb, var(--custom-card) 92%, transparent) !important;
+  border-color: color-mix(in srgb, var(--custom-accent) 35%, transparent) !important;
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--custom-background) 68%, black);
+}
+
+.design-custom .nav-active {
+  color: var(--custom-text) !important;
+  background: var(--custom-accent);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--custom-accent) 28%, transparent);
+}
+
+.app-shell.design-custom .bg-slate-50,
+.app-shell.design-custom .bg-slate-50\/50,
+.app-shell.design-custom .bg-slate-100 {
+  background-color: color-mix(in srgb, var(--custom-card) 84%, var(--custom-text) 16%) !important;
+}
+
+.app-shell.design-custom .bg-emerald-50,
+.app-shell.design-custom .bg-blue-50,
+.app-shell.design-custom .bg-indigo-50,
+.app-shell.design-custom .bg-purple-50,
+.app-shell.design-custom .bg-amber-50 {
+  background-color: color-mix(in srgb, var(--custom-accent) 13%, var(--custom-card)) !important;
+}
+
+.app-shell.design-custom .bg-emerald-500,
+.app-shell.design-custom .bg-emerald-600 {
+  background-color: var(--custom-accent) !important;
+}
+
+.app-shell.design-custom .text-slate-900,
+.app-shell.design-custom .text-slate-850,
+.app-shell.design-custom .text-slate-800,
+.app-shell.design-custom .text-slate-700,
+.app-shell.design-custom .text-slate-600 {
+  color: var(--custom-text) !important;
+}
+
+.app-shell.design-custom .text-slate-500,
+.app-shell.design-custom .text-slate-450,
+.app-shell.design-custom .text-slate-400,
+.app-shell.design-custom .text-slate-300 {
+  color: color-mix(in srgb, var(--custom-text) 64%, transparent) !important;
+}
+
+.app-shell.design-custom .text-emerald-700,
+.app-shell.design-custom .text-emerald-600,
+.app-shell.design-custom .text-emerald-500,
+.app-shell.design-custom .text-blue-600,
+.app-shell.design-custom .text-indigo-600,
+.app-shell.design-custom .text-purple-600,
+.app-shell.design-custom .text-amber-600 {
+  color: var(--custom-accent) !important;
+}
+
+.app-shell.design-custom .border-slate-50,
+.app-shell.design-custom .border-slate-100,
+.app-shell.design-custom .border-slate-200,
+.app-shell.design-custom .border-slate-200\/50,
+.app-shell.design-custom .border-emerald-100\/50 {
+  border-color: color-mix(in srgb, var(--custom-accent) 28%, transparent) !important;
+}
+
+.app-shell.design-custom .divide-slate-50 > :not(:last-child) {
+  border-color: color-mix(in srgb, var(--custom-accent) 20%, transparent) !important;
+}
+
+.app-shell.design-custom input,
+.app-shell.design-custom select {
+  color: var(--custom-text);
+  background: color-mix(in srgb, var(--custom-background) 70%, var(--custom-card)) !important;
+  border-color: color-mix(in srgb, var(--custom-accent) 32%, transparent) !important;
+}
+
+.app-shell.design-custom input::placeholder {
+  color: color-mix(in srgb, var(--custom-text) 48%, transparent);
+}
+
+.app-shell.design-custom input:focus,
+.app-shell.design-custom select:focus {
+  border-color: var(--custom-accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--custom-accent) 16%, transparent);
+}
+
+.design-custom .theme-toggle:hover {
+  color: var(--custom-accent) !important;
+  border-color: var(--custom-accent) !important;
 }
 
 @media (min-width: 640px) {

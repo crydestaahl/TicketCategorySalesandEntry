@@ -37,6 +37,17 @@ export interface AppSettings {
   password: string;
 }
 
+export interface CustomDesign {
+  id: string;
+  name: string;
+  backgroundColor: string;
+  textColor: string;
+  cardColor: string;
+  accentColor: string;
+}
+
+export type DesignId = 'default' | 'old-future' | `custom:${string}`;
+
 export interface TicksterEventItem {
   id?: string;
   eventRequestCode?: string;

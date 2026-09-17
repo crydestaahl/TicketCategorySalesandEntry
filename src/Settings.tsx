@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { AppSettings, TicksterEventItem } from './types';
-import { Save, Shield, Key, User, Building2, Calendar, RefreshCcw, AlertCircle, Globe, Palette } from 'lucide-react';
+import { AppSettings, CustomDesign, DesignId, TicksterEventItem } from './types';
+import { Save, Shield, Key, User, Building2, Calendar, RefreshCcw, AlertCircle, Globe, Palette, Plus, ArrowLeft, Trash2 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 type Language = 'sv' | 'en';
-type Design = 'default' | 'old-future';
 
 interface SettingsProps {
   onSave: (settings: AppSettings) => void;
@@ -12,8 +11,11 @@ interface SettingsProps {
   texts: Record<string, string>;
   language: Language;
   setLanguage: (lang: Language | ((prev: Language) => Language)) => void;
-  design: Design;
-  setDesign: (design: Design) => void;
+  design: DesignId;
+  setDesign: (design: DesignId) => void;
+  customDesigns: CustomDesign[];
+  saveCustomDesign: (design: Omit<CustomDesign, 'id'>) => void;
+  deleteCustomDesign: (id: string) => void;
 }
 
 const EVENTS_CACHE_KEY = 'tickster_events_cache';
@@ -51,8 +53,16 @@ const readCachedEvents = (eogRequestCode: string): TicksterEventItem[] => {
   return [];
 };
 
-export default function Settings({ onSave, initialSettings, texts, language, setLanguage, design, setDesign }: SettingsProps) {
+export default function Settings({ onSave, initialSettings, texts, language, setLanguage, design, setDesign, customDesigns, saveCustomDesign, deleteCustomDesign }: SettingsProps) {
   const [settings, setSettings] = useState<AppSettings>(initialSettings);
+  const [showCustomEditor, setShowCustomEditor] = useState(false);
+  const [customName, setCustomName] = useState('');
+  const [customColors, setCustomColors] = useState({
+    backgroundColor: '#111633',
+    textColor: '#f5f7ff',
+    cardColor: '#202958',
+    accentColor: '#ff3b91',
+  });
   
   // Load cached events from local storage on mount
   const [events, setEvents] = useState<TicksterEventItem[]>(() => readCachedEvents(initialSettings.eogRequestCode));
@@ -127,6 +137,118 @@ export default function Settings({ onSave, initialSettings, texts, language, set
     };
     localStorage.setItem('tickster_settings', JSON.stringify(safeSettings));
   };
+
+  const colorFields: { key: keyof typeof customColors; label: string }[] = [
+    { key: 'backgroundColor', label: texts.customBackground },
+    { key: 'textColor', label: texts.customText },
+    { key: 'cardColor', label: texts.customCards },
+    { key: 'accentColor', label: texts.customAccent },
+  ];
+
+  const handleSaveCustomDesign = () => {
+    const name = customName.trim();
+    if (!name) return;
+    saveCustomDesign({ name, ...customColors });
+    setCustomName('');
+    setShowCustomEditor(false);
+  };
+
+  if (showCustomEditor) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="custom-design-editor p-6 max-w-md mx-auto space-y-6"
+      >
+        <div className="flex items-start gap-3">
+          <button
+            type="button"
+            onClick={() => setShowCustomEditor(false)}
+            className="p-3 rounded-2xl bg-white border border-slate-100 text-slate-600 active:scale-95 transition-all"
+            aria-label={texts.cancel}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">{texts.customDesignTitle}</h1>
+            <p className="text-slate-500">{texts.customDesignDescription}</p>
+          </div>
+        </div>
+
+        <section className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+          <div>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 block ml-1">
+              {texts.customDesignName}
+            </label>
+            <input
+              type="text"
+              value={customName}
+              onChange={(event) => setCustomName(event.target.value)}
+              placeholder={texts.customDesignNamePlaceholder}
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl outline-none text-sm font-semibold text-slate-800 placeholder-slate-400"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {colorFields.map(field => (
+              <label key={field.key} className="custom-color-field bg-slate-50 border border-slate-200 rounded-2xl p-3">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">{field.label}</span>
+                <span className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={customColors[field.key]}
+                    onChange={(event) => setCustomColors(current => ({ ...current, [field.key]: event.target.value }))}
+                    aria-label={field.label}
+                    className="custom-color-input"
+                  />
+                  <span className="text-xs text-slate-600 uppercase">{customColors[field.key]}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">{texts.customPreview}</h2>
+          <div
+            className="custom-design-preview rounded-3xl border p-5"
+            style={{
+              backgroundColor: customColors.backgroundColor,
+              color: customColors.textColor,
+              borderColor: customColors.accentColor,
+            }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-xl font-bold">{texts.customPreviewTitle}</p>
+                <p className="text-sm opacity-60">{texts.customPreviewText}</p>
+              </div>
+              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: customColors.accentColor }} />
+            </div>
+            <div className="rounded-2xl p-4 border" style={{ backgroundColor: customColors.cardColor, borderColor: `${customColors.accentColor}66` }}>
+              <div className="flex justify-between items-end gap-4">
+                <span className="text-sm uppercase tracking-wider opacity-70">{texts.admitted}</span>
+                <span className="text-2xl font-black">72%</span>
+              </div>
+              <div className="h-1.5 rounded-full mt-3 overflow-hidden" style={{ backgroundColor: `${customColors.textColor}22` }}>
+                <div className="h-full w-[72%] rounded-full" style={{ backgroundColor: customColors.accentColor }} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <button
+          type="button"
+          onClick={handleSaveCustomDesign}
+          disabled={!customName.trim()}
+          className="w-full bg-emerald-600 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-40"
+        >
+          <Save className="w-5 h-5" />
+          {texts.saveCustomDesign}
+        </button>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div 
@@ -367,7 +489,51 @@ export default function Settings({ onSave, initialSettings, texts, language, set
             <span className="design-swatch block mb-2" aria-hidden="true" />
             <span className="text-sm font-bold uppercase tracking-wider">{texts.designOldFuture}</span>
           </button>
+          <button
+            type="button"
+            onClick={() => setShowCustomEditor(true)}
+            className="design-option design-option-custom rounded-2xl border p-3 text-left transition-all"
+          >
+            <span className="design-swatch custom-swatch flex items-center justify-center mb-2" aria-hidden="true">
+              <Plus className="w-5 h-5" />
+            </span>
+            <span className="text-sm font-bold uppercase tracking-wider">{texts.designCustom}</span>
+          </button>
         </div>
+
+        {customDesigns.length > 0 && (
+          <div className="space-y-2 pt-1">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">{texts.savedDesigns}</h3>
+            {customDesigns.map(customDesign => {
+              const designId: DesignId = `custom:${customDesign.id}`;
+              return (
+                <div key={customDesign.id} className={`saved-design-row flex items-center gap-2 rounded-2xl border p-2 ${design === designId ? 'is-selected' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => setDesign(designId)}
+                    className="flex flex-1 min-w-0 items-center gap-3 text-left p-1"
+                    aria-pressed={design === designId}
+                  >
+                    <span
+                      className="w-9 h-9 rounded-xl border flex-shrink-0"
+                      style={{ background: customDesign.cardColor, borderColor: customDesign.accentColor }}
+                    />
+                    <span className="text-sm font-bold text-slate-800 truncate">{customDesign.name}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deleteCustomDesign(customDesign.id)}
+                    className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                    aria-label={`${texts.deleteDesign}: ${customDesign.name}`}
+                    title={texts.deleteDesign}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     </motion.div>
   );

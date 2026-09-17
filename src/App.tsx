@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppSettings, TicksterResponse } from './types';
+import { AppSettings, CustomDesign, DesignId, TicksterResponse } from './types';
 import Dashboard from './components/Dashboard';
 import CategoriesAndSections from './components/CategoriesAndSections';
 import Settings from './Settings';
@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'motion/react';
 
 type Language = 'sv' | 'en';
 type Theme = 'dark' | 'light';
-type Design = 'default' | 'old-future';
 type FetchOptions = {
   ignoreCooldown?: boolean;
 };
@@ -33,6 +32,22 @@ const translations = {
     designDescription: 'Välj appens visuella stil',
     designDefault: 'Default',
     designOldFuture: 'Old Future',
+    designCustom: 'Custom',
+    customDesignTitle: 'Skapa egen design',
+    customDesignDescription: 'Justera färger och se resultatet direkt',
+    customDesignName: 'Designnamn',
+    customDesignNamePlaceholder: 'Min design',
+    customBackground: 'Bakgrund',
+    customText: 'Text',
+    customCards: 'Rutor',
+    customAccent: 'Accent',
+    customPreview: 'Förhandsvisning',
+    customPreviewTitle: 'Biljettstatus',
+    customPreviewText: 'Din design visas här',
+    saveCustomDesign: 'Spara design',
+    cancel: 'Tillbaka',
+    savedDesigns: 'Sparade designer',
+    deleteDesign: 'Ta bort design',
     missingFieldsError: 'Vänligen fyll i alla fält i inställningarna.',
     fetchDataError: 'Kunde inte hämta data',
     settingsTitle: 'Inställningar',
@@ -106,6 +121,22 @@ const translations = {
     designDescription: 'Choose the visual style',
     designDefault: 'Default',
     designOldFuture: 'Old Future',
+    designCustom: 'Custom',
+    customDesignTitle: 'Create custom design',
+    customDesignDescription: 'Adjust colors and preview the result live',
+    customDesignName: 'Design name',
+    customDesignNamePlaceholder: 'My design',
+    customBackground: 'Background',
+    customText: 'Text',
+    customCards: 'Cards',
+    customAccent: 'Accent',
+    customPreview: 'Preview',
+    customPreviewTitle: 'Ticket status',
+    customPreviewText: 'Your design appears here',
+    saveCustomDesign: 'Save design',
+    cancel: 'Back',
+    savedDesigns: 'Saved designs',
+    deleteDesign: 'Delete design',
     missingFieldsError: 'Please fill in all settings fields.',
     fetchDataError: 'Could not fetch data',
     settingsTitle: 'Settings',
@@ -173,6 +204,16 @@ const translations = {
 const TICKET_CACHE_KEY = 'tickster_cache';
 const TICKET_CACHE_TIME_KEY = 'tickster_cache_time';
 const TICKET_CACHE_SETTINGS_KEY = 'tickster_cache_settings_key';
+const CUSTOM_DESIGNS_KEY = 'tickster_custom_designs';
+
+const readCustomDesigns = (): CustomDesign[] => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CUSTOM_DESIGNS_KEY) || '[]');
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+};
 
 const normalizeSettings = (settings: Partial<AppSettings> | null | undefined): AppSettings => ({
   ...DEFAULT_SETTINGS,
@@ -209,9 +250,10 @@ export default function App() {
     const saved = localStorage.getItem('tickster_theme');
     return saved === 'light' ? 'light' : 'dark';
   });
-  const [design, setDesign] = useState<Design>(() => {
+  const [customDesigns, setCustomDesigns] = useState<CustomDesign[]>(readCustomDesigns);
+  const [design, setDesign] = useState<DesignId>(() => {
     const saved = localStorage.getItem('tickster_design');
-    return saved === 'old-future' ? 'old-future' : 'default';
+    return saved === 'old-future' || saved?.startsWith('custom:') ? saved as DesignId : 'default';
   });
   const texts = translations[language];
   
@@ -273,6 +315,30 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('tickster_design', design);
   }, [design]);
+
+  useEffect(() => {
+    localStorage.setItem(CUSTOM_DESIGNS_KEY, JSON.stringify(customDesigns));
+  }, [customDesigns]);
+
+  useEffect(() => {
+    if (design.startsWith('custom:') && !customDesigns.some(item => item.id === design.slice(7))) {
+      setDesign('default');
+    }
+  }, [customDesigns, design]);
+
+  const saveCustomDesign = (customDesign: Omit<CustomDesign, 'id'>) => {
+    const savedDesign: CustomDesign = {
+      ...customDesign,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    };
+    setCustomDesigns(current => [...current, savedDesign]);
+    setDesign(`custom:${savedDesign.id}`);
+  };
+
+  const deleteCustomDesign = (id: string) => {
+    setCustomDesigns(current => current.filter(item => item.id !== id));
+    if (design === `custom:${id}`) setDesign('default');
+  };
 
   const toggleTheme = () => setTheme(current => current === 'dark' ? 'light' : 'dark');
 
@@ -357,9 +423,21 @@ export default function App() {
 
   const currentDataCacheKey = getSettingsCacheKey(settings);
   const tickets = dataCacheKey === currentDataCacheKey ? data?.tickets || [] : [];
+  const activeCustomDesign = design.startsWith('custom:')
+    ? customDesigns.find(item => item.id === design.slice(7))
+    : undefined;
+  const customStyle = activeCustomDesign ? {
+    '--custom-background': activeCustomDesign.backgroundColor,
+    '--custom-text': activeCustomDesign.textColor,
+    '--custom-card': activeCustomDesign.cardColor,
+    '--custom-accent': activeCustomDesign.accentColor,
+  } as React.CSSProperties : undefined;
 
   return (
-    <div className={`app-shell theme-${theme} design-${design} min-h-screen font-sans`}>
+    <div
+      className={`app-shell theme-${theme} ${activeCustomDesign ? 'design-custom' : `design-${design}`} min-h-screen font-sans`}
+      style={customStyle}
+    >
       {/* Content Area */}
       <main className="pb-28">
         <AnimatePresence mode="wait">
@@ -426,6 +504,9 @@ export default function App() {
                 setLanguage={setLanguage}
                 design={design}
                 setDesign={setDesign}
+                customDesigns={customDesigns}
+                saveCustomDesign={saveCustomDesign}
+                deleteCustomDesign={deleteCustomDesign}
               />
             </motion.div>
           )}

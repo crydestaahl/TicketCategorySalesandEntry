@@ -14,7 +14,7 @@ interface DashboardProps {
   fetchData: () => Promise<void>;
   theme: 'dark' | 'light';
   toggleTheme: () => void;
-  design: 'default' | 'old-future';
+  design: import('../types').DesignId;
 }
 
 export default function Dashboard({
@@ -122,7 +122,7 @@ export default function Dashboard({
                 cy="96"
                 r="80"
                 fill="none"
-                stroke={design === 'old-future' ? (theme === 'dark' ? '#514b40' : '#c9c5b2') : (theme === 'dark' ? '#242c60' : '#e1e6f5')}
+                stroke={design.startsWith('custom:') ? 'var(--custom-card)' : design === 'old-future' ? (theme === 'dark' ? '#514b40' : '#c9c5b2') : (theme === 'dark' ? '#242c60' : '#e1e6f5')}
                 strokeWidth="16"
               />
               <motion.circle
@@ -140,8 +140,8 @@ export default function Dashboard({
               />
               <defs>
                 <linearGradient id="entryGradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor={design === 'old-future' ? '#cbd5aa' : '#4776ff'} />
-                  <stop offset="100%" stopColor={design === 'old-future' ? '#e45f4f' : '#ff2f91'} />
+                  <stop offset="0%" stopColor={design.startsWith('custom:') ? 'var(--custom-text)' : design === 'old-future' ? '#cbd5aa' : '#4776ff'} />
+                  <stop offset="100%" stopColor={design.startsWith('custom:') ? 'var(--custom-accent)' : design === 'old-future' ? '#e45f4f' : '#ff2f91'} />
                 </linearGradient>
               </defs>
             </svg>
