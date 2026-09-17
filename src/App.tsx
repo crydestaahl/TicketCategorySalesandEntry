@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 type Language = 'sv' | 'en';
 type Theme = 'dark' | 'light';
+type Design = 'default' | 'old-future';
 type FetchOptions = {
   ignoreCooldown?: boolean;
 };
@@ -28,6 +29,10 @@ const translations = {
     toggleLanguage: 'EN',
     lightTheme: 'Byt till ljust tema',
     darkTheme: 'Byt till mörkt tema',
+    designTitle: 'Design',
+    designDescription: 'Välj appens visuella stil',
+    designDefault: 'Default',
+    designOldFuture: 'Old Future',
     missingFieldsError: 'Vänligen fyll i alla fält i inställningarna.',
     fetchDataError: 'Kunde inte hämta data',
     settingsTitle: 'Inställningar',
@@ -97,6 +102,10 @@ const translations = {
     toggleLanguage: 'SV',
     lightTheme: 'Switch to light theme',
     darkTheme: 'Switch to dark theme',
+    designTitle: 'Design',
+    designDescription: 'Choose the visual style',
+    designDefault: 'Default',
+    designOldFuture: 'Old Future',
     missingFieldsError: 'Please fill in all settings fields.',
     fetchDataError: 'Could not fetch data',
     settingsTitle: 'Settings',
@@ -200,6 +209,10 @@ export default function App() {
     const saved = localStorage.getItem('tickster_theme');
     return saved === 'light' ? 'light' : 'dark';
   });
+  const [design, setDesign] = useState<Design>(() => {
+    const saved = localStorage.getItem('tickster_design');
+    return saved === 'old-future' ? 'old-future' : 'default';
+  });
   const texts = translations[language];
   
   // Lifted state for Ticket database
@@ -256,6 +269,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('tickster_theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem('tickster_design', design);
+  }, [design]);
 
   const toggleTheme = () => setTheme(current => current === 'dark' ? 'light' : 'dark');
 
@@ -342,7 +359,7 @@ export default function App() {
   const tickets = dataCacheKey === currentDataCacheKey ? data?.tickets || [] : [];
 
   return (
-    <div className={`app-shell theme-${theme} min-h-screen font-sans`}>
+    <div className={`app-shell theme-${theme} design-${design} min-h-screen font-sans`}>
       {/* Content Area */}
       <main className="pb-28">
         <AnimatePresence mode="wait">
@@ -365,6 +382,7 @@ export default function App() {
                 fetchData={() => fetchData()} 
                 theme={theme}
                 toggleTheme={toggleTheme}
+                design={design}
               />
             </motion.div>
           )}
@@ -400,7 +418,15 @@ export default function App() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.15 }}
             >
-              <Settings onSave={handleSaveSettings} initialSettings={settings} texts={texts} language={language} setLanguage={setLanguage} />
+              <Settings
+                onSave={handleSaveSettings}
+                initialSettings={settings}
+                texts={texts}
+                language={language}
+                setLanguage={setLanguage}
+                design={design}
+                setDesign={setDesign}
+              />
             </motion.div>
           )}
         </AnimatePresence>

@@ -269,6 +269,265 @@ select {
   border-color: rgba(255, 47, 145, 0.35) !important;
 }
 
+.design-option {
+  color: #9aa5d2;
+  background: rgba(12, 17, 51, 0.45);
+  border-color: rgba(132, 148, 255, 0.18);
+}
+
+.design-option.is-selected {
+  color: #ffffff;
+  border-color: #668cff;
+  box-shadow: 0 0 0 2px rgba(102, 140, 255, 0.12);
+}
+
+.design-swatch {
+  height: 2.25rem;
+  border-radius: 0.55rem;
+}
+
+.design-option-default .design-swatch {
+  background: linear-gradient(135deg, #151a42, #4776ff 56%, #ff2f91);
+}
+
+.design-option-old-future .design-swatch {
+  border: 1px solid #e45f4f;
+  background:
+    radial-gradient(circle at 24% 50%, transparent 0 7px, #e45f4f 8px 9px, transparent 10px),
+    linear-gradient(rgba(203, 213, 170, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(203, 213, 170, 0.18) 1px, transparent 1px),
+    #332f2a;
+  background-size: 8px 8px;
+}
+
+.theme-light .design-option {
+  color: #68739d;
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(75, 91, 164, 0.18);
+}
+
+.theme-light .design-option.is-selected {
+  color: #182047;
+}
+
+/* Old Future: warm analog instrumentation inspired by mid-century control rooms. */
+.app-shell.design-old-future {
+  --retro-coral: #e45f4f;
+  --retro-sage: #cbd5aa;
+  --retro-ink: #292621;
+  --retro-panel: rgba(50, 46, 40, 0.94);
+  color: #e8ead4;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(203, 213, 170, 0.1), transparent 18rem),
+    radial-gradient(circle at 82% 24%, rgba(228, 95, 79, 0.08), transparent 22rem),
+    #292621;
+}
+
+.app-shell.design-old-future::before {
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(203, 213, 170, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(203, 213, 170, 0.1) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.app-shell.design-old-future::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.13;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 3px, rgba(0, 0, 0, 0.42) 4px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.5));
+}
+
+.design-old-future .app-nav {
+  background: rgba(42, 39, 34, 0.97);
+  border: 1px solid var(--retro-sage);
+  border-radius: 5px;
+  box-shadow: 6px 6px 0 rgba(228, 95, 79, 0.18);
+}
+
+.design-old-future .nav-active {
+  color: #f2eed8 !important;
+  background: var(--retro-coral);
+  box-shadow: none;
+}
+
+.app-shell.design-old-future .bg-white,
+.app-shell.design-old-future .bg-white\/80 {
+  background-color: var(--retro-panel) !important;
+  backdrop-filter: none;
+}
+
+.app-shell.design-old-future .bg-slate-50,
+.app-shell.design-old-future .bg-slate-50\/50,
+.app-shell.design-old-future .bg-slate-100 {
+  background-color: rgba(67, 62, 53, 0.92) !important;
+}
+
+.app-shell.design-old-future .bg-emerald-50,
+.app-shell.design-old-future .bg-blue-50,
+.app-shell.design-old-future .bg-indigo-50,
+.app-shell.design-old-future .bg-purple-50,
+.app-shell.design-old-future .bg-amber-50 {
+  background-color: rgba(203, 213, 170, 0.09) !important;
+}
+
+.app-shell.design-old-future .bg-emerald-500,
+.app-shell.design-old-future .bg-emerald-600 {
+  background-color: var(--retro-coral) !important;
+}
+
+.app-shell.design-old-future .text-slate-900,
+.app-shell.design-old-future .text-slate-850,
+.app-shell.design-old-future .text-slate-800,
+.app-shell.design-old-future .text-slate-700,
+.app-shell.design-old-future .text-slate-600 {
+  color: #eef0db !important;
+}
+
+.app-shell.design-old-future .text-slate-500,
+.app-shell.design-old-future .text-slate-450,
+.app-shell.design-old-future .text-slate-400,
+.app-shell.design-old-future .text-slate-300 {
+  color: #aeb69a !important;
+}
+
+.app-shell.design-old-future .text-emerald-700,
+.app-shell.design-old-future .text-emerald-600,
+.app-shell.design-old-future .text-emerald-500,
+.app-shell.design-old-future .text-blue-600,
+.app-shell.design-old-future .text-indigo-600 {
+  color: var(--retro-coral) !important;
+}
+
+.app-shell.design-old-future .text-purple-600,
+.app-shell.design-old-future .text-amber-600 {
+  color: var(--retro-sage) !important;
+}
+
+.app-shell.design-old-future .border-slate-50,
+.app-shell.design-old-future .border-slate-100,
+.app-shell.design-old-future .border-slate-200,
+.app-shell.design-old-future .border-slate-200\/50,
+.app-shell.design-old-future .border-emerald-100\/50 {
+  border-color: rgba(203, 213, 170, 0.38) !important;
+}
+
+.app-shell.design-old-future .divide-slate-50 > :not(:last-child) {
+  border-color: rgba(203, 213, 170, 0.22) !important;
+}
+
+.app-shell.design-old-future input,
+.app-shell.design-old-future select {
+  color: var(--retro-sage);
+  background: #26231f !important;
+  border-color: rgba(203, 213, 170, 0.48) !important;
+  border-radius: 3px;
+}
+
+.app-shell.design-old-future input::placeholder {
+  color: #7e846f;
+}
+
+.app-shell.design-old-future input:focus,
+.app-shell.design-old-future select:focus {
+  border-color: var(--retro-coral) !important;
+  box-shadow: 0 0 0 2px rgba(228, 95, 79, 0.18);
+}
+
+.app-shell.design-old-future .rounded-2xl,
+.app-shell.design-old-future .rounded-3xl,
+.app-shell.design-old-future .rounded-\[32px\] {
+  border-radius: 5px;
+  box-shadow: 4px 4px 0 rgba(228, 95, 79, 0.08);
+}
+
+.app-shell.design-old-future .rounded-xl,
+.app-shell.design-old-future .rounded-lg {
+  border-radius: 3px;
+}
+
+.app-shell.design-old-future main div.bg-white,
+.app-shell.design-old-future main section.bg-white {
+  position: relative;
+  border-left-color: var(--retro-coral) !important;
+}
+
+.app-shell.design-old-future main div.bg-white::after,
+.app-shell.design-old-future main section.bg-white::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.7rem;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--retro-coral) 0 5px, transparent 5px 9px);
+}
+
+.design-old-future .theme-toggle:hover {
+  color: var(--retro-coral) !important;
+  border-color: var(--retro-coral) !important;
+}
+
+.design-old-future .design-option {
+  color: #aeb69a;
+  background: #26231f;
+  border-color: rgba(203, 213, 170, 0.34);
+  border-radius: 3px;
+}
+
+.design-old-future .design-option.is-selected {
+  color: var(--retro-coral);
+  border-color: var(--retro-coral);
+  box-shadow: 4px 4px 0 rgba(203, 213, 170, 0.14);
+}
+
+.app-shell.design-old-future.theme-light {
+  --retro-ink: #302d27;
+  --retro-panel: rgba(232, 229, 207, 0.95);
+  color: #302d27;
+  background:
+    radial-gradient(circle at 75% 18%, rgba(228, 95, 79, 0.12), transparent 20rem),
+    linear-gradient(180deg, rgba(203, 213, 170, 0.2), transparent 8rem),
+    #d8d4c0;
+}
+
+.app-shell.design-old-future.theme-light .text-slate-900,
+.app-shell.design-old-future.theme-light .text-slate-850,
+.app-shell.design-old-future.theme-light .text-slate-800,
+.app-shell.design-old-future.theme-light .text-slate-700,
+.app-shell.design-old-future.theme-light .text-slate-600 {
+  color: #302d27 !important;
+}
+
+.app-shell.design-old-future.theme-light .text-slate-500,
+.app-shell.design-old-future.theme-light .text-slate-450,
+.app-shell.design-old-future.theme-light .text-slate-400,
+.app-shell.design-old-future.theme-light .text-slate-300 {
+  color: #6e6a59 !important;
+}
+
+.app-shell.design-old-future.theme-light .bg-slate-50,
+.app-shell.design-old-future.theme-light .bg-slate-50\/50,
+.app-shell.design-old-future.theme-light .bg-slate-100 {
+  background-color: rgba(205, 203, 182, 0.92) !important;
+}
+
+.app-shell.design-old-future.theme-light input,
+.app-shell.design-old-future.theme-light select {
+  color: #302d27;
+  background: #efeddc !important;
+}
+
+.design-old-future.theme-light .app-nav {
+  background: rgba(232, 229, 207, 0.97);
+}
+
 @media (min-width: 640px) {
   .app-shell main {
     padding-top: 2rem;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AppSettings, TicksterEventItem } from './types';
-import { Save, Shield, Key, User, Building2, Calendar, RefreshCcw, AlertCircle, Globe } from 'lucide-react';
+import { Save, Shield, Key, User, Building2, Calendar, RefreshCcw, AlertCircle, Globe, Palette } from 'lucide-react';
 import { motion } from 'motion/react';
 
 type Language = 'sv' | 'en';
+type Design = 'default' | 'old-future';
 
 interface SettingsProps {
   onSave: (settings: AppSettings) => void;
@@ -11,6 +12,8 @@ interface SettingsProps {
   texts: Record<string, string>;
   language: Language;
   setLanguage: (lang: Language | ((prev: Language) => Language)) => void;
+  design: Design;
+  setDesign: (design: Design) => void;
 }
 
 const EVENTS_CACHE_KEY = 'tickster_events_cache';
@@ -48,7 +51,7 @@ const readCachedEvents = (eogRequestCode: string): TicksterEventItem[] => {
   return [];
 };
 
-export default function Settings({ onSave, initialSettings, texts, language, setLanguage }: SettingsProps) {
+export default function Settings({ onSave, initialSettings, texts, language, setLanguage, design, setDesign }: SettingsProps) {
   const [settings, setSettings] = useState<AppSettings>(initialSettings);
   
   // Load cached events from local storage on mount
@@ -336,6 +339,36 @@ export default function Settings({ onSave, initialSettings, texts, language, set
           {texts.saveSettings}
         </button>
       </form>
+
+      <section className="design-picker bg-white p-5 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+        <div className="flex items-center gap-2">
+          <Palette className="w-4 h-4 text-emerald-600" />
+          <div>
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">{texts.designTitle}</h2>
+            <p className="text-xs text-slate-500">{texts.designDescription}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => setDesign('default')}
+            aria-pressed={design === 'default'}
+            className={`design-option design-option-default rounded-2xl border p-3 text-left transition-all ${design === 'default' ? 'is-selected' : ''}`}
+          >
+            <span className="design-swatch block mb-2" aria-hidden="true" />
+            <span className="text-sm font-bold uppercase tracking-wider">{texts.designDefault}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setDesign('old-future')}
+            aria-pressed={design === 'old-future'}
+            className={`design-option design-option-old-future rounded-2xl border p-3 text-left transition-all ${design === 'old-future' ? 'is-selected' : ''}`}
+          >
+            <span className="design-swatch block mb-2" aria-hidden="true" />
+            <span className="text-sm font-bold uppercase tracking-wider">{texts.designOldFuture}</span>
+          </button>
+        </div>
+      </section>
     </motion.div>
   );
 }
