@@ -1,6 +1,6 @@
 import React from 'react';
 import { TicksterResponse, TicksterTicket, AppSettings } from '../types';
-import { Users, LogIn, Clock, RefreshCcw, AlertCircle, Ticket } from 'lucide-react';
+import { Users, LogIn, Clock, RefreshCcw, AlertCircle, Ticket, Moon, Sun } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface DashboardProps {
@@ -12,6 +12,8 @@ interface DashboardProps {
   lastUpdated: Date | null;
   cooldown: number;
   fetchData: () => Promise<void>;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
 }
 
 export default function Dashboard({
@@ -23,6 +25,8 @@ export default function Dashboard({
   lastUpdated,
   cooldown,
   fetchData,
+  theme,
+  toggleTheme,
 }: DashboardProps) {
 
   if (loading && tickets.length === 0) {
@@ -72,19 +76,31 @@ export default function Dashboard({
             <span>{texts.updated}: {lastUpdated?.toLocaleTimeString() || texts.never}</span>
           </div>
         </div>
-        <button 
-          onClick={fetchData}
-          disabled={loading || cooldown > 0}
-          className={`relative p-3 rounded-2xl bg-white border border-slate-100 shadow-sm text-slate-600 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 ${loading ? 'animate-spin' : ''}`}
-        >
-          {cooldown > 0 ? (
-            <span className="text-[10px] font-black text-emerald-600 absolute inset-0 flex items-center justify-center">
-              {cooldown}
-            </span>
-          ) : (
-            <RefreshCcw className="w-5 h-5" />
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? texts.lightTheme : texts.darkTheme}
+            title={theme === 'dark' ? texts.lightTheme : texts.darkTheme}
+            className="theme-toggle p-3 rounded-2xl bg-white border border-slate-100 shadow-sm text-slate-600 active:scale-95 transition-all"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+          <button
+            onClick={fetchData}
+            disabled={loading || cooldown > 0}
+            aria-label="Refresh"
+            className={`relative p-3 rounded-2xl bg-white border border-slate-100 shadow-sm text-slate-600 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 ${loading ? 'animate-spin' : ''}`}
+          >
+            {cooldown > 0 ? (
+              <span className="text-[10px] font-black text-emerald-600 absolute inset-0 flex items-center justify-center">
+                {cooldown}
+              </span>
+            ) : (
+              <RefreshCcw className="w-5 h-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Main Stat Card (Gauge-like) */}
@@ -104,7 +120,7 @@ export default function Dashboard({
                 cy="96"
                 r="80"
                 fill="none"
-                stroke="#F1F5F9"
+                stroke={theme === 'dark' ? '#242c60' : '#e1e6f5'}
                 strokeWidth="16"
               />
               <motion.circle
@@ -112,7 +128,7 @@ export default function Dashboard({
                 cy="96"
                 r="80"
                 fill="none"
-                stroke="#10B981"
+                stroke="url(#entryGradient)"
                 strokeWidth="16"
                 strokeDasharray={502.6}
                 initial={{ strokeDashoffset: 502.6 }}
@@ -120,6 +136,12 @@ export default function Dashboard({
                 transition={{ duration: 1.5, ease: "easeOut" }}
                 strokeLinecap="round"
               />
+              <defs>
+                <linearGradient id="entryGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#4776ff" />
+                  <stop offset="100%" stopColor="#ff2f91" />
+                </linearGradient>
+              </defs>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-5xl font-black text-slate-900">{admitted}</span>

@@ -7,6 +7,7 @@ import { LayoutDashboard, Settings as SettingsIcon, Layers } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react';
 
 type Language = 'sv' | 'en';
+type Theme = 'dark' | 'light';
 type FetchOptions = {
   ignoreCooldown?: boolean;
 };
@@ -25,6 +26,8 @@ const translations = {
     navCategories: 'Kategori & Sekt.',
     navSettings: 'Inställningar',
     toggleLanguage: 'EN',
+    lightTheme: 'Byt till ljust tema',
+    darkTheme: 'Byt till mörkt tema',
     missingFieldsError: 'Vänligen fyll i alla fält i inställningarna.',
     fetchDataError: 'Kunde inte hämta data',
     settingsTitle: 'Inställningar',
@@ -92,6 +95,8 @@ const translations = {
     navCategories: 'Category & Sec.',
     navSettings: 'Settings',
     toggleLanguage: 'SV',
+    lightTheme: 'Switch to light theme',
+    darkTheme: 'Switch to dark theme',
     missingFieldsError: 'Please fill in all settings fields.',
     fetchDataError: 'Could not fetch data',
     settingsTitle: 'Settings',
@@ -191,6 +196,10 @@ export default function App() {
     const saved = localStorage.getItem('tickster_language');
     return saved === 'en' ? 'en' : 'sv';
   });
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = localStorage.getItem('tickster_theme');
+    return saved === 'light' ? 'light' : 'dark';
+  });
   const texts = translations[language];
   
   // Lifted state for Ticket database
@@ -243,6 +252,12 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('tickster_language', language);
   }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('tickster_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(current => current === 'dark' ? 'light' : 'dark');
 
   // Cooldown countdown timer
   useEffect(() => {
@@ -327,7 +342,7 @@ export default function App() {
   const tickets = dataCacheKey === currentDataCacheKey ? data?.tickets || [] : [];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
+    <div className={`app-shell theme-${theme} min-h-screen font-sans`}>
       {/* Content Area */}
       <main className="pb-28">
         <AnimatePresence mode="wait">
@@ -348,6 +363,8 @@ export default function App() {
                 lastUpdated={lastUpdated} 
                 cooldown={cooldown} 
                 fetchData={() => fetchData()} 
+                theme={theme}
+                toggleTheme={toggleTheme}
               />
             </motion.div>
           )}
@@ -369,6 +386,8 @@ export default function App() {
                 lastUpdated={lastUpdated} 
                 cooldown={cooldown} 
                 fetchData={() => fetchData()} 
+                theme={theme}
+                toggleTheme={toggleTheme}
               />
             </motion.div>
           )}
@@ -388,13 +407,13 @@ export default function App() {
       </main>
 
       {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl shadow-slate-200/50 rounded-[32px] p-2 flex items-center justify-around z-50">
+      <nav className="app-nav fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md backdrop-blur-xl rounded-[32px] p-2 flex items-center justify-around z-50">
         <button
           onClick={() => setView('dashboard')}
           className={`flex-1 flex flex-col items-center gap-1 py-3 rounded-3xl transition-all ${
             view === 'dashboard' 
-              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' 
-              : 'text-slate-400 hover:text-slate-600'
+              ? 'nav-active text-white shadow-lg'
+              : 'text-slate-400 hover:text-white'
           }`}
         >
           <LayoutDashboard className="w-5 h-5" />
@@ -413,8 +432,8 @@ export default function App() {
           }}
           className={`flex-1 flex flex-col items-center gap-1 py-3 rounded-3xl transition-all ${
             view === 'categories' 
-              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' 
-              : 'text-slate-400 hover:text-slate-600'
+              ? 'nav-active text-white shadow-lg'
+              : 'text-slate-400 hover:text-white'
           }`}
         >
           <Layers className="w-5 h-5" />
@@ -425,8 +444,8 @@ export default function App() {
           onClick={() => setView('settings')}
           className={`flex-1 flex flex-col items-center gap-1 py-3 rounded-3xl transition-all ${
             view === 'settings' 
-              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' 
-              : 'text-slate-400 hover:text-slate-600'
+              ? 'nav-active text-white shadow-lg'
+              : 'text-slate-400 hover:text-white'
           }`}
         >
           <SettingsIcon className="w-5 h-5" />

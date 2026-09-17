@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { TicksterTicket, AppSettings } from '../types';
-import { Layers, MapPin, Search, Inbox, Ticket, Clock, RefreshCcw, AlertCircle } from 'lucide-react';
+import { Layers, MapPin, Search, Inbox, Ticket, Clock, RefreshCcw, AlertCircle, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface CategoriesAndSectionsProps {
@@ -12,6 +12,8 @@ interface CategoriesAndSectionsProps {
   lastUpdated: Date | null;
   cooldown: number;
   fetchData: () => Promise<void>;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
 }
 
 export default function CategoriesAndSections({
@@ -23,6 +25,8 @@ export default function CategoriesAndSections({
   lastUpdated,
   cooldown,
   fetchData,
+  theme,
+  toggleTheme,
 }: CategoriesAndSectionsProps) {
   const [activeTab, setActiveTab] = useState<'category' | 'section'>('category');
   const [searchTerm, setSearchTerm] = useState('');
@@ -166,19 +170,31 @@ export default function CategoriesAndSections({
             <span>{texts.updated}: {lastUpdated?.toLocaleTimeString() || texts.never}</span>
           </div>
         </div>
-        <button 
-          onClick={fetchData}
-          disabled={loading || cooldown > 0}
-          className={`relative p-3 rounded-2xl bg-white border border-slate-100 shadow-sm text-slate-600 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 ${loading ? 'animate-spin' : ''}`}
-        >
-          {cooldown > 0 ? (
-            <span className="text-[10px] font-black text-emerald-600 absolute inset-0 flex items-center justify-center">
-              {cooldown}
-            </span>
-          ) : (
-            <RefreshCcw className="w-5 h-5" />
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? texts.lightTheme : texts.darkTheme}
+            title={theme === 'dark' ? texts.lightTheme : texts.darkTheme}
+            className="theme-toggle p-3 rounded-2xl bg-white border border-slate-100 shadow-sm text-slate-600 active:scale-95 transition-all"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+          <button
+            onClick={fetchData}
+            disabled={loading || cooldown > 0}
+            aria-label="Refresh"
+            className={`relative p-3 rounded-2xl bg-white border border-slate-100 shadow-sm text-slate-600 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 ${loading ? 'animate-spin' : ''}`}
+          >
+            {cooldown > 0 ? (
+              <span className="text-[10px] font-black text-emerald-600 absolute inset-0 flex items-center justify-center">
+                {cooldown}
+              </span>
+            ) : (
+              <RefreshCcw className="w-5 h-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Kategori- & Sektionsfördelning */}

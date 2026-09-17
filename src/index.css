@@ -1,1 +1,287 @@
 @import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --font-sans: "Bebas Neue", Impact, sans-serif;
+  font-family: "Bebas Neue", Impact, sans-serif;
+  background: #0b1235;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #0b1235;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 12% 6%, rgba(91, 85, 214, 0.24), transparent 27rem),
+    radial-gradient(circle at 92% 34%, rgba(17, 113, 218, 0.2), transparent 30rem),
+    linear-gradient(155deg, #14183f 0%, #0b1235 48%, #111a45 100%);
+}
+
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.25;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+.app-nav {
+  background: rgba(20, 26, 66, 0.88);
+  border: 1px solid rgba(132, 148, 255, 0.2);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.nav-active {
+  background: linear-gradient(135deg, #3c66f5 0%, #7249d7 52%, #f22a8a 115%);
+  box-shadow: 0 10px 30px rgba(74, 91, 239, 0.32);
+}
+
+/* Dark glass theme. Class selectors deliberately mirror the existing Tailwind
+   palette so component behaviour and layout can stay untouched. */
+.app-shell .bg-white,
+.app-shell .bg-white\/80 {
+  background-color: rgba(24, 30, 72, 0.78) !important;
+  backdrop-filter: blur(18px);
+}
+
+.app-shell .bg-slate-50,
+.app-shell .bg-slate-50\/50,
+.app-shell .bg-slate-100 {
+  background-color: rgba(38, 46, 99, 0.62) !important;
+}
+
+.app-shell .bg-emerald-50,
+.app-shell .bg-blue-50,
+.app-shell .bg-indigo-50,
+.app-shell .bg-purple-50,
+.app-shell .bg-amber-50 {
+  background-color: rgba(80, 92, 211, 0.15) !important;
+}
+
+.app-shell .bg-emerald-500,
+.app-shell .bg-emerald-600 {
+  background-color: #ff2f91 !important;
+}
+
+.app-shell .text-slate-900,
+.app-shell .text-slate-850,
+.app-shell .text-slate-800,
+.app-shell .text-slate-700,
+.app-shell .text-slate-600 {
+  color: #f7f8ff !important;
+}
+
+.app-shell .text-slate-500,
+.app-shell .text-slate-450,
+.app-shell .text-slate-400 {
+  color: #9aa5d2 !important;
+}
+
+.app-shell .text-slate-300 {
+  color: #6671a4 !important;
+}
+
+.app-shell .text-emerald-700,
+.app-shell .text-emerald-600,
+.app-shell .text-emerald-500,
+.app-shell .text-blue-600,
+.app-shell .text-indigo-600 {
+  color: #668cff !important;
+}
+
+.app-shell .text-purple-600,
+.app-shell .text-amber-600 {
+  color: #ff4ca0 !important;
+}
+
+.app-shell .border-slate-50,
+.app-shell .border-slate-100,
+.app-shell .border-slate-200,
+.app-shell .border-slate-200\/50,
+.app-shell .border-emerald-100\/50 {
+  border-color: rgba(132, 148, 255, 0.15) !important;
+}
+
+.app-shell .divide-slate-50 > :not(:last-child) {
+  border-color: rgba(132, 148, 255, 0.12) !important;
+}
+
+.app-shell .shadow-slate-200\/50,
+.app-shell .shadow-slate-200,
+.app-shell .shadow-emerald-200\/50 {
+  --tw-shadow-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.app-shell input,
+.app-shell select {
+  color: #f7f8ff;
+  background: rgba(12, 17, 51, 0.66) !important;
+  border-color: rgba(132, 148, 255, 0.2) !important;
+}
+
+.app-shell input::placeholder {
+  color: #6975a5;
+}
+
+.app-shell input:focus,
+.app-shell select:focus {
+  border-color: #668cff !important;
+  box-shadow: 0 0 0 3px rgba(82, 111, 255, 0.14);
+}
+
+.app-shell option {
+  color: #eef1ff;
+  background: #171d48;
+}
+
+.app-shell .rounded-3xl,
+.app-shell .rounded-\[32px\] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 16px 45px rgba(0, 0, 0, 0.16);
+}
+
+.app-shell main > div > div > div {
+  position: relative;
+}
+
+.app-shell .bg-red-50 {
+  background-color: rgba(127, 29, 55, 0.25) !important;
+}
+
+.app-shell .text-red-900,
+.app-shell .text-red-700,
+.app-shell .text-red-600 {
+  color: #ff9ab9 !important;
+}
+
+.app-shell .border-red-100 {
+  border-color: rgba(255, 76, 139, 0.25) !important;
+}
+
+/* Light counterpart keeps the same blue/magenta identity. */
+.app-shell.theme-light {
+  color-scheme: light;
+  color: #182047;
+  background:
+    radial-gradient(circle at 10% 5%, rgba(174, 132, 219, 0.24), transparent 28rem),
+    radial-gradient(circle at 92% 35%, rgba(64, 143, 232, 0.2), transparent 30rem),
+    linear-gradient(155deg, #f7f3fb 0%, #edf3ff 50%, #e1edff 100%);
+}
+
+.app-shell.theme-light::before {
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(43, 56, 116, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43, 56, 116, 0.045) 1px, transparent 1px);
+}
+
+.theme-light .app-nav {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(81, 98, 182, 0.15);
+  box-shadow: 0 22px 55px rgba(58, 71, 128, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.app-shell.theme-light .bg-white,
+.app-shell.theme-light .bg-white\/80 {
+  background-color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.app-shell.theme-light .bg-slate-50,
+.app-shell.theme-light .bg-slate-50\/50,
+.app-shell.theme-light .bg-slate-100 {
+  background-color: rgba(230, 235, 250, 0.72) !important;
+}
+
+.app-shell.theme-light .bg-emerald-50,
+.app-shell.theme-light .bg-blue-50,
+.app-shell.theme-light .bg-indigo-50,
+.app-shell.theme-light .bg-purple-50,
+.app-shell.theme-light .bg-amber-50 {
+  background-color: rgba(90, 105, 221, 0.1) !important;
+}
+
+.app-shell.theme-light .text-slate-900,
+.app-shell.theme-light .text-slate-850,
+.app-shell.theme-light .text-slate-800,
+.app-shell.theme-light .text-slate-700,
+.app-shell.theme-light .text-slate-600 {
+  color: #182047 !important;
+}
+
+.app-shell.theme-light .text-slate-500,
+.app-shell.theme-light .text-slate-450,
+.app-shell.theme-light .text-slate-400 {
+  color: #68739d !important;
+}
+
+.app-shell.theme-light .text-slate-300 {
+  color: #929abd !important;
+}
+
+.app-shell.theme-light .border-slate-50,
+.app-shell.theme-light .border-slate-100,
+.app-shell.theme-light .border-slate-200,
+.app-shell.theme-light .border-slate-200\/50,
+.app-shell.theme-light .border-emerald-100\/50 {
+  border-color: rgba(75, 91, 164, 0.13) !important;
+}
+
+.app-shell.theme-light .divide-slate-50 > :not(:last-child) {
+  border-color: rgba(75, 91, 164, 0.1) !important;
+}
+
+.app-shell.theme-light input,
+.app-shell.theme-light select {
+  color: #182047;
+  background: rgba(247, 249, 255, 0.82) !important;
+  border-color: rgba(75, 91, 164, 0.18) !important;
+}
+
+.app-shell.theme-light input::placeholder {
+  color: #8b94b7;
+}
+
+.app-shell.theme-light .rounded-3xl,
+.app-shell.theme-light .rounded-\[32px\] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 16px 45px rgba(62, 76, 137, 0.1);
+}
+
+.theme-toggle:hover {
+  color: #ff2f91 !important;
+  border-color: rgba(255, 47, 145, 0.35) !important;
+}
+
+@media (min-width: 640px) {
+  .app-shell main {
+    padding-top: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
