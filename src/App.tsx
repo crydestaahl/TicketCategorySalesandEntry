@@ -432,6 +432,23 @@ export default function App() {
     '--custom-card': activeCustomDesign.cardColor,
     '--custom-accent': activeCustomDesign.accentColor,
   } as React.CSSProperties : undefined;
+  const browserThemeColor = activeCustomDesign?.backgroundColor
+    ?? (design === 'old-future'
+      ? (theme === 'dark' ? '#292621' : '#d8d4c0')
+      : (theme === 'dark' ? '#0b1235' : '#edf3ff'));
+
+  useEffect(() => {
+    let themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (!themeColorMeta) {
+      themeColorMeta = document.createElement('meta');
+      themeColorMeta.name = 'theme-color';
+      document.head.appendChild(themeColorMeta);
+    }
+
+    themeColorMeta.content = browserThemeColor;
+    document.documentElement.style.backgroundColor = browserThemeColor;
+    document.body.style.backgroundColor = browserThemeColor;
+  }, [browserThemeColor]);
 
   return (
     <div
